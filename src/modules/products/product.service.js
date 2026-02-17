@@ -8,7 +8,9 @@ const createProductService = async (data) => {
 
 // Fetch all
 const getAllProductsService = async () => {
-  return prisma.product.findMany({ orderBy: { createdAt: 'desc' } });
+  return prisma.product.findMany({
+    orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],
+  });
 };
 
 // Fetch one
