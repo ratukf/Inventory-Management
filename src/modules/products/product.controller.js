@@ -1,9 +1,13 @@
 // Controller
-import { validateCreateProduct } from './product.validation.js';
+import {
+  validateCreateProduct,
+  validateUpdateProduct,
+} from './product.validation.js';
 import {
   createProductService,
   getAllProductsService,
   getProductByIdService,
+  updateProductService,
 } from './product.service.js';
 
 // FETCH
@@ -46,4 +50,18 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-export { getAllProducts, createProduct, getOneProduct };
+// PATCH
+const updateProduct = async (req, res, next) => {
+  try {
+    validateUpdateProduct(req.body);
+    const product = await updateProductService(req.params.id, req.body);
+    res.json({
+      status: 'success',
+      data: product,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { getAllProducts, createProduct, getOneProduct, updateProduct };
