@@ -5,6 +5,7 @@ import {
 } from './product.validation.js';
 import {
   createProductService,
+  deleteProductService,
   getAllProductsService,
   getProductByIdService,
   updateProductService,
@@ -64,4 +65,23 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-export { getAllProducts, createProduct, getOneProduct, updateProduct };
+// DELETE
+const deleteProduct = async (req, res, next) => {
+  try {
+    await deleteProductService(req.params.id);
+    res.json({
+      status: 'success',
+      message: 'Product deleted successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export {
+  getAllProducts,
+  createProduct,
+  getOneProduct,
+  updateProduct,
+  deleteProduct,
+};
