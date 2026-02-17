@@ -13,32 +13,29 @@ const getAllOrderItemsService = async () => {
 
 // Fetch items' report
 const getOrderItemReportService = async () => {
-  // Group by productId and calculate the quantities and revenues
-  const grouped = await prisma.orderItem.groupBy({
-    by: ['productId'],
-    _sum: {
-      quantity: true,
-      price: true,
-    },
+  // Fetch all order item
+  const items = await prisma.orderItem.findMany({
+    include: { product: true },
   });
 
-  // Fetch product data for each productId
-  const report = await Promise.all(
-    grouped.map(async (g) => {
-      const product = await prisma.product.findUnique({
-        where: { id: g.productId },
-      });
-
-      return {
-        productId: g.productId,
-        productName: product?.name || null,
-        totalQuantity: g._sum.quantity,
-        totalRevenue: g._sum.price,
+  // Calculate quantity total & revenue total per product
+  const reportMap = {};
+  items.forEach((item) => {
+    const id = item.productId;
+    if (!reportMap[id]) {
+      reportMap[id] = {
+        productId: id,
+        productName: item.product.name,
+        totalQuantity: 0,
+        totalRevenue: 0,
       };
-    }),
-  );
+    }
 
-  return report;
+    reportMap[id].totalQuantity += item.quantity;
+    reportMap[id].totalRevenue += Number(item.price) * item.quantity;
+  });
+
+  return Object.values(reportMap);
 };
 
 export { getAllOrderItemsService, getOrderItemReportService };
