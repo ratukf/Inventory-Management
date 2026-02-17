@@ -1,6 +1,13 @@
 # Inventory Management API
 
-RESTful API for managing products and orders with stock validation to demonstrate data relation between products, orders, and ordered item. Built with Node.js, Express, Prisma, and PostgreSQL.
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+
+RESTful API for managing products and orders with stock validation to
+demonstrate data relation between products, orders, and ordered item. Built with
+Node.js, Express, Prisma, and PostgreSQL.
 
 ## Features
 
@@ -10,7 +17,6 @@ RESTful API for managing products and orders with stock validation to demonstrat
 - Relational database design (Order & OrderItem)
 - Transaction handling for data consistency
 - Global error handling
-- Proper HTTP status codes
 
 ## API Endpoints
 
@@ -36,7 +42,6 @@ DELETE /products/:id
 POST /orders
 GET /orders
 GET /orders/:id
-PATCH /orders/:id/status
 ```
 
 ## Constrains
