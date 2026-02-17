@@ -3,6 +3,7 @@ import cors from 'cors';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { router as productRouter } from './modules/products/product.route.js';
 import { router as orderRouter } from './modules/orders/order.route.js';
+import { router as orderItemRouter } from './modules/orderItem/orderItem.route.js';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 // Routes
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/order', orderRouter);
+app.use('/api/v1/orderItem', orderItemRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API running' });
