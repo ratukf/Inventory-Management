@@ -4,18 +4,31 @@ import prisma from '../../lib/prisma.js';
 const createOrderService = async (items) => {
   const totalPrice = items.reduce((sum, i) => sum + i.quantity * i.price, 0);
 
-  return prisma.order.create({
-    data: {
-      totalPrice,
-      orderItems: {
-        create: items.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-          price: item.price,
-        })),
+  return prisma.$transaction(async (tx) => {
+    // Create order
+    const order = await tx.order.create({
+      data: {
+        totalPrice,
+        orderItems: {
+          create: items.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        },
       },
-    },
-    include: { orderItems: true },
+      include: { orderItems: true },
+    });
+
+    // Reduce stock for each products ordered
+    for (const item of items) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stock: { decrement: item.quantity } },
+      });
+    }
+
+    return order;
   });
 };
 
